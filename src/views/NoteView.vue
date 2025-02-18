@@ -1,53 +1,48 @@
+<template>
+    <div class="min-h-screen bg-gray-50 py-8">
+        <h1
+            class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
+            TODO-APP DE RICHI
+        </h1>
 
-<!-- <template>
-    <div class="container">
-        <h1>Aplicación de Notas</h1>
-        <NoteForm @add-note="addNote" />
-        <FilterMenu @filter-tag="setFilter" @clear-notes="clearNotes" />
-        <NoteList :notes="filteredNotes" @delete-note="deleteNote" @edit-note="editNote" />
+        <div class=" mx-auto px-4 flex gap-6">
+            <!-- Columna izquierda -->
+            <div class="w-1/3">
+                <NoteForm :notaParaEditar="notaEnEdicion" @notaGuardada="finalizarEdicion" />
+                <br>
+                <TagManager class="mb-6" />
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="w-2/3">
+                <NoteList @editarNota="manejarEdicion" />
+            </div>
+        </div>
+
+
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useNotesStore } from '@/stores/notesStore';
-import NoteForm from '@/components/notes/NoteForm.vue';
-import FilterMenu from '@/components/notes/FilterMenu.vue';
-import NoteList from '@/components/notes/NoteList.vue';
-import type { Note } from '@/types/note';
+import { ref } from 'vue'
 
-const store = useNotesStore();
-const filterTag = ref<string | null>(null);
+import type { Note } from '@/interfaces/Types'
+import NoteForm from '@/components/notes/NoteForm.vue'
+import TagManager from '@/components/TagManager.vue'
+import NoteList from '@/components/notes/NoteList.vue'
 
-const addNote = (title: string, content: string, tags: string[]) => {
-    store.addNote(title, content, tags);
-};
+const notaEnEdicion = ref<Note | null>(null)
 
-const deleteNote = (id: number) => {
-    store.deleteNote(id);
-};
-
-const editNote = (id: number, updatedNote: Note) => {
-    store.updateNote(id, updatedNote);
-};
-
-const setFilter = (tag: string | null) => {
-    filterTag.value = tag;
-};
-
-const clearNotes = () => {
-    store.clearNotes();
-};
-
-const filteredNotes = computed(() => {
-    return filterTag.value ? store.filterByTag(filterTag.value) : store.notes;
-});
-</script>
-
-<style scoped>
-.container {
-    max-width: 600px;
-    margin: auto;
-    text-align: center;
+function manejarEdicion(nota: Note) {
+    notaEnEdicion.value = nota
+    // Hacer scroll suave hacia el formulario
+    const formulario = document.querySelector('form')
+    if (formulario) {
+        formulario.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
 }
-</style> -->
+
+function finalizarEdicion() {
+    notaEnEdicion.value = null
+}
+</script>

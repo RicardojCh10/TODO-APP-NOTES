@@ -1,47 +1,21 @@
-<template>
-  <div class="min-h-screen bg-gray-50 py-8">
-    <h1
-      class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
-      TODO-APP DE RICHI
-    </h1>
-
-    <div class=" mx-auto px-4 flex gap-6">
-      <!-- Columna izquierda -->
-      <div class="w-1/3">
-        <NoteForm :notaParaEditar="notaEnEdicion" @notaGuardada="finalizarEdicion" />
-        <br>
-        <TagManager class="mb-6" />
-      </div>
-
-      <!-- Columna derecha -->
-      <div class="w-2/3">
-        <NoteList @editarNota="manejarEdicion" />
-      </div>
-    </div>
-
-
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Note } from './interfaces/Types'
-import NoteForm from './components/notes/NoteForm.vue'
-import NoteList from './components/notes/NoteList.vue'
-import TagManager from './components/TagManager.vue'
-
-const notaEnEdicion = ref<Note | null>(null)
-
-function manejarEdicion(nota: Note) {
-  notaEnEdicion.value = nota
-  // Hacer scroll suave hacia el formulario
-  const formulario = document.querySelector('form')
-  if (formulario) {
-    formulario.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-}
-
-function finalizarEdicion() {
-  notaEnEdicion.value = null
-}
+import { RouterLink, RouterView } from 'vue-router'
 </script>
+
+<template>
+  <header>
+    <nav
+      class="flex items-center justify-center bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-500 p-4 text-white shadow-lg">
+      <RouterLink class="mx-4 text-2xl font-bold hover:text-gray-100 transition-colors duration-300"
+        :to="{ name: 'home' }">
+        Home
+      </RouterLink>
+      <RouterLink class="mx-4 text-2xl font-bold hover:text-gray-100 transition-colors duration-300"
+        :to="{ name: 'notes' }">
+        Todo-app
+      </RouterLink>
+    </nav>
+  </header>
+
+  <RouterView />
+</template>
